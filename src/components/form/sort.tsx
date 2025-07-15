@@ -1,24 +1,30 @@
-import { Radio, RadioGroup } from "@heroui/react";
+import { AutocompleteItem, Select } from "@heroui/react";
 import { useController, useFormContext } from "react-hook-form";
 
-interface ISortProps {
+import { sortValues } from "../filter/filter";
+
+interface ISortSelectProps {
   name: string;
 }
 
-export const Sort = ({ name }: ISortProps) => {
+export const SortSelect = ({ name }: ISortSelectProps) => {
+  const sorts = [sortValues.stars, sortValues.forks, sortValues.updated];
+
   const { control } = useFormContext();
-  const { field } = useController({ name, control });
+  const { field } = useController({ name: name, control });
+
   return (
-    <RadioGroup
+    <Select
       {...field}
-      label="Сортировать по:"
-      className="my-4"
-      orientation="horizontal"
+      className="text-default-700/50 mt-4"
+      label="Фильтровать по"
+      defaultSelectedKeys={[field.value]}
     >
-      <Radio value="desc">убыванию</Radio>
-      <Radio className="mr-2" value="asc">
-        возрастанию
-      </Radio>
-    </RadioGroup>
+      {sorts.map((sort) => (
+        <AutocompleteItem className="text-default-700" key={sort}>
+          {sort}
+        </AutocompleteItem>
+      ))}
+    </Select>
   );
 };
