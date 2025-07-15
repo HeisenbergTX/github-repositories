@@ -8,14 +8,14 @@ export const $currentPage = createStore(1);
 export const $isOpenFilter = createStore<boolean>(false);
 export const $filterStore = createStore({
   language: "Typescript",
-  sort: "desc",
-  per_page: "20",
+  sort: "stars",
+  order: "desc",
 });
 
 interface IParams {
   language: string;
   sort: string;
-  per_page: string;
+  order: string;
 }
 
 export const setFilterStoreFx = createEffect((params: IParams) => params);

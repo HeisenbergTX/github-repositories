@@ -1,30 +1,49 @@
-import axios from "axios";
 import { createEffect, createEvent, createStore } from "effector";
+
+import { api } from "@/api";
 
 import { $currentPage, $filterStore } from "./filter";
 import { IRepos } from "./types";
 
 export const $repos = createStore<IRepos[]>([]);
-export const $reposError = createStore(null);
+export const $reposError = createStore<null | string>(null);
 
 export const resetStore = createEvent();
+export const setError = createEvent<null | string>();
 
 export const fetchReposFx = createEffect(async () => {
   const page = $currentPage.getState();
-  const { language, per_page, sort } = $filterStore.getState();
+  const { language, sort, order } = $filterStore.getState();
 
-  const response = await axios
-    .get(
-      `https://api.github.com/search/repositories?q=${language.toLowerCase()}&sort=stars&order=${sort}&per_page=${per_page}&page=${page}`
-    )
-    .then((response) => response.data)
-    .catch((error) => console.error("Error: ", error.message));
+  try {
+    setError(null);
+    const response = await api.get("/search/repositories", {
+      params: {
+        q: language.toLowerCase(),
+        sort: sort,
+        order: order,
+        per_page: "20",
+        page,
+      },
+    });
 
-  return response?.items;
+    if (!response?.data?.items?.length) {
+      setError(
+        "Упс, по такому запросу ничего не нашлось. Попробуйте ввести другой запрос или воспользуйтесь фильтром."
+      );
+      throw new Error("Reponse is not iterable");
+    }
+    return response?.data?.items;
+  } catch (error: unknown) {
+    if (typeof error === "object" && error !== null && "message" in error) {
+      console.error(error.message);
+    }
+  }
 });
 
 export const $isLoading = fetchReposFx.pending.map((isPending) => isPending);
 
 $repos.on(fetchReposFx.doneData, (state, repos) => [...state, ...repos]);
-
 $repos.reset(resetStore);
+
+$reposError.on(setError, (state, payload) => (state = payload));

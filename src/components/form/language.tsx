@@ -15,7 +15,7 @@ export const LanguageSelect = ({ name }: ILanguageSelectProps) => {
     <Select
       {...field}
       className="text-default-700/50"
-      label="Select a language"
+      label="Выберите язык"
       defaultSelectedKeys={[field.value]}
     >
       {langs.map((lang) => (

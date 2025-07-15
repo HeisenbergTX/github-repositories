@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { Roboto } from "next/font/google";
+import { Roboto_Flex } from "next/font/google";
 
 import { Providers } from "./providers";
 
 import "./globals.css";
 
-const roboto = Roboto({
+const roboto = Roboto_Flex({
   subsets: ["cyrillic", "latin"],
 });
 

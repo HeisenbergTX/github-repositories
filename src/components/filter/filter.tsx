@@ -6,7 +6,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { MouseEvent, TouchEvent, useEffect, useRef } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 
-import { LanguageSelect, PerPage, Sort } from "@/components/form";
+import { LanguageSelect, Order, SortSelect } from "@/components/form";
 import {
   $isOpenFilter,
   resetCurrent,
@@ -15,8 +15,13 @@ import {
 } from "@/store/filter";
 import { $isLoading, fetchReposFx, resetStore } from "@/store/repos";
 
-
 import { IData } from "./types";
+
+export const sortValues = {
+  stars: "Звёздам",
+  forks: "Форкам",
+  updated: "Обновлениям",
+};
 
 export const Filter = () => {
   const filterRef = useRef<HTMLFormElement>(null);
@@ -25,22 +30,26 @@ export const Filter = () => {
   const methods = useForm<IData>({
     defaultValues: {
       language: "Typescript",
-      sort: "desc",
-      per_page: "20",
+      sort: sortValues.stars,
+      order: "desc",
     },
   });
 
   const { handleSubmit, reset } = methods;
 
-  const submit: SubmitHandler<IData> = ({ language, sort, per_page }) => {
+  const submit: SubmitHandler<IData> = ({ language, sort, order }) => {
+    const sortValue = Object.entries(sortValues).filter(
+      ([value]) => value === sort
+    )?.[0]?.[0];
+
     reset();
     resetStore();
     resetCurrent();
     setOpen(false);
     setFilterStoreFx({
       language,
-      sort,
-      per_page,
+      sort: sortValue,
+      order,
     });
 
     fetchReposFx();
@@ -55,7 +64,7 @@ export const Filter = () => {
   };
 
   useEffect(() => {
-    if (isOpenFilter && window.screen.height < 768) {
+    if (isOpenFilter && window.screen.width < 768) {
       document.body.style.overflow = "hidden";
     }
     return () => {
@@ -102,8 +111,8 @@ export const Filter = () => {
                   Закрыть
                 </Button>
                 <LanguageSelect name="language" />
-                <Sort name="sort" />
-                <PerPage name="per_page" />
+                <SortSelect name="sort" />
+                <Order name="order" />
                 <div className="w-full flex justify-end mt-6  gap-2 ">
                   <Button type="submit" variant="bordered" color="primary">
                     Применить

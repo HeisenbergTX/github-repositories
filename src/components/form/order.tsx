@@ -1,26 +1,25 @@
 import { Radio, RadioGroup } from "@heroui/react";
 import { useController, useFormContext } from "react-hook-form";
 
-interface IPerPageProps {
+interface IOrderProps {
   name: string;
 }
 
-export const PerPage = ({ name }: IPerPageProps) => {
+export const Order = ({ name }: IOrderProps) => {
   const { control } = useFormContext();
   const { field } = useController({ name, control });
+
   return (
     <RadioGroup
       {...field}
-      label="Количество на странице"
+      label="Сортировать по:"
+      className="my-4"
       orientation="horizontal"
     >
-      <Radio className="mr-2" value="20">
-        20
+      <Radio value="desc">убыванию</Radio>
+      <Radio className="mr-2" value="asc">
+        возрастанию
       </Radio>
-      <Radio className="mr-2" value="40">
-        40
-      </Radio>
-      <Radio value="60">60</Radio>
     </RadioGroup>
   );
 };
