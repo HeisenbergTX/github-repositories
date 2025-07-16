@@ -6,7 +6,17 @@ interface ILanguageSelectProps {
 }
 
 export const LanguageSelect = ({ name }: ILanguageSelectProps) => {
-  const langs = ["Typescript", "Javascript", "React", "Next", "Python", "Java"];
+  const langs = [
+    "Typescript",
+    "Javascript",
+    "Go",
+    "Kotlin",
+    "Python",
+    "Java",
+    "Rust",
+    "Swift",
+    "Ruby",
+  ];
 
   const { control } = useFormContext();
   const { field } = useController({ name: name, control });
@@ -16,6 +26,7 @@ export const LanguageSelect = ({ name }: ILanguageSelectProps) => {
       {...field}
       className="text-default-700/50"
       label="Выберите язык"
+      variant="bordered"
       defaultSelectedKeys={[field.value]}
     >
       {langs.map((lang) => (
