@@ -3,7 +3,7 @@
 import { Button } from "@heroui/react";
 import { useUnit } from "effector-react";
 import { AnimatePresence, motion } from "framer-motion";
-import { MouseEvent, TouchEvent, useEffect, useRef } from "react";
+import { MouseEvent, useEffect, useRef } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 
 import { LanguageSelect, Order, SortSelect } from "@/components/form";
@@ -63,6 +63,10 @@ export const Filter = () => {
     setOpen(false);
   };
 
+  const onClickForm = (e: MouseEvent) => {
+    e.stopPropagation();
+  };
+
   useEffect(() => {
     if (isOpenFilter && window.screen.width < 768) {
       document.body.style.overflow = "hidden";
@@ -71,17 +75,6 @@ export const Filter = () => {
       document.body.style.overflow = "auto";
     };
   }, [isOpenFilter || isLoading]);
-
-  const handleClickOutside = (
-    event: MouseEvent<HTMLElement> | TouchEvent<HTMLElement>
-  ) => {
-    if (
-      filterRef.current &&
-      !filterRef.current.contains(event.target as Node)
-    ) {
-      setOpen(false);
-    }
-  };
 
   return (
     <AnimatePresence>
@@ -93,13 +86,15 @@ export const Filter = () => {
             duration: 0.2,
           }}
           exit={{ opacity: 0, y: 10, paddingTop: 60 }}
-          onClick={handleClickOutside}
-          onMouseDown={handleClickOutside}
-          onTouchStart={handleClickOutside}
+          onClick={closeFilter}
           className="px-4 top-0 fixed w-screen h-screen z-20 bg-black/15 backdrop-blur-xs md:w-96 md:bg-transparent md:right-0 md:backdrop-blur-none"
         >
           <FormProvider {...methods}>
-            <form ref={filterRef} onSubmit={handleSubmit(submit)}>
+            <form
+              ref={filterRef}
+              onSubmit={handleSubmit(submit)}
+              onClick={onClickForm}
+            >
               <div className="px-2.5 pb-5 rounded-xl border-1 border-default-700/50 border-solid bg-white shadow-xl w-full flex flex-col">
                 <Button
                   type="button"

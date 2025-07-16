@@ -4,12 +4,13 @@ import {
   StarIcon,
   ChevronUpIcon,
   DocumentDuplicateIcon,
+  LinkIcon,
 } from "@heroicons/react/24/outline";
 import { Image, Link } from "@heroui/react";
 import { formatDistance } from "date-fns";
 import { ru } from "date-fns/locale";
 import { useUnit } from "effector-react";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
 import { setValue } from "@/store/inputStore";
@@ -81,6 +82,11 @@ export const RepoList = () => {
                   {item.owner.login} -{" "}
                   <Link target="_blank" href={item.html_url}>
                     {item.name}
+                    <LinkIcon
+                      width={12}
+                      height={12}
+                      className="text-primary ml-0.5 mt-0.5"
+                    />
                   </Link>
                 </div>
               </div>
@@ -124,17 +130,19 @@ export const RepoList = () => {
           {errorMessage}
         </p>
       )}
-      {isVisible && (
-        <motion.button
-          initial={{ opacity: 0, scale: 0 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0 }}
-          onClick={scrollToTop}
-          className="fixed bg-primary/80 bottom-20 right-6 rounded-full p-2 z-50"
-        >
-          <ChevronUpIcon color="white" width={24} height={24} />
-        </motion.button>
-      )}
+      <AnimatePresence>
+        {isVisible && (
+          <motion.button
+            initial={{ opacity: 0, scale: 0 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0 }}
+            onClick={scrollToTop}
+            className="fixed bg-[#338cf1] bottom-20 right-6 rounded-full p-2 z-50 cursor-pointer"
+          >
+            <ChevronUpIcon color="white" width={24} height={24} />
+          </motion.button>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
