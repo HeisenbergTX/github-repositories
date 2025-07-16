@@ -3,7 +3,7 @@
 import { FunnelIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { Button, Input } from "@heroui/react";
 import { useUnit } from "effector-react";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { ChangeEvent } from "react";
 
 import {
@@ -54,21 +54,24 @@ export const Header = () => {
           <MagnifyingGlassIcon className="text-slate-400 pointer-events-none flex-shrink-0 w-5 h-5" />
         }
         endContent={
-          value && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0 }}
-              animate={{ opacity: 1, scale: 1 }}
-            >
-              <Button
-                onPress={handleOnPress}
-                size="sm"
-                variant="bordered"
-                className="border-primary/80 text-primary/80"
+          <AnimatePresence>
+            {value && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0 }}
               >
-                Поиск
-              </Button>
-            </motion.div>
-          )
+                <Button
+                  onPress={handleOnPress}
+                  size="sm"
+                  variant="bordered"
+                  className="border-primary/80 text-primary/80"
+                >
+                  Поиск
+                </Button>
+              </motion.div>
+            )}
+          </AnimatePresence>
         }
       />
       <div onClick={setOpenFilter} className="cursor-pointer">

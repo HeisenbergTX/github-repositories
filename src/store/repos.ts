@@ -31,7 +31,7 @@ export const fetchReposFx = createEffect(async () => {
       setError(
         "Упс, по такому запросу ничего не нашлось. Попробуйте ввести другой запрос или воспользуйтесь фильтром."
       );
-      throw new Error("Reponse is not iterable");
+      throw new Error("Response is not iterable");
     }
     return response?.data?.items;
   } catch (error: unknown) {

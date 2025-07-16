@@ -18,6 +18,7 @@ export const SortSelect = ({ name }: ISortSelectProps) => {
       {...field}
       className="text-default-700/50 mt-4"
       label="Фильтровать по"
+      variant="bordered"
       defaultSelectedKeys={[field.value]}
     >
       {sorts.map((sort) => (
